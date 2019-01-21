@@ -36,6 +36,7 @@ STATUS_CHOICES = (
     (DISLIKED, 'Dislike')
 )
 
+'''Age Options'''
 BABY = 'b'
 YOUNG = 'y'
 ADULT = 'a'
