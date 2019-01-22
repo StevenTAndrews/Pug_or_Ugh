@@ -20,5 +20,7 @@ urlpatterns = format_suffix_patterns([
             permanent=True
         )),
     url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^api/dog/(?P<pk>-?\d+)/(?P<decision>liked|disliked|undecided)/next/$', views.RetrieveDogView.as_view(), name='next-dog'),
+     url(r'^api/dog/(?P<pk>\d+)/(?P<decision>liked|disliked|undecided)/$', views.DecisionView.as_view(), name='decide'),
     url(r'^api/user/preferences/', views.RetrieveUpdateUserPref.as_view(), name='user_pref'),
 ])

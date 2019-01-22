@@ -31,9 +31,11 @@ SIZE_CHOICES = (
 '''Like or Dislike options'''
 LIKED = 'l'
 DISLIKED = 'd'
+UNDECIDED = 'u'
 STATUS_CHOICES = (
     (LIKED, 'Like'),
-    (DISLIKED, 'Dislike')
+    (DISLIKED, 'Dislike'),
+    (UNDECIDED, 'Undecided')
 )
 
 '''Age Options'''
@@ -57,6 +59,26 @@ class Dog(models.Model):
     age = models.IntegerField()
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     size = models.CharField(max_length=1, choices=SIZE_CHOICES)
+    age_group = models.CharField(max_length=1, default='b')
+
+    @property
+    def get_age_group(self):
+        '''Return an age group for a given Dog'''
+        if self.age < 10:
+            return 'b'
+        elif self.age < 30:
+            return 'y'
+        elif self.age < 60:
+            return 'a'
+        else:
+            return 's'
+
+    def save(self, *args, **kwargs):
+        self.age_group = self.get_age_group
+        super(Dog, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return "{0}, {1}".format(self.name, self.id)
 
     def __str__(self):
         return self.name
@@ -65,7 +87,7 @@ class Dog(models.Model):
 class UserDog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dog = models.ForeignKey(Dog, on_delete=models.CASCADE)
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=2, default='u', choices=STATUS_CHOICES)
 
 
 class UserPref(models.Model):
